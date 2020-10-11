@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 public class Users {
+	// Исправленная кодировка
 	public static final String url = "jdbc:postgresql://localhost:5432/test1";
 	public static final String login = "postgres";
 	public static final String password = "123";
