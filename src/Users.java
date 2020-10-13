@@ -59,18 +59,16 @@ public class Users {
 
 //		USER_OPERATIONS.showUsersData();
 
-//		Users userCreate = new Users("Will", "Smith", "1968-09-25", 4);
-//		USER_OPERATIONS.create(userCreate);
+//		Users createUser = new Users("Will", "Smith", "1968-10-26", 4);
+//		USER_OPERATIONS.create(createUser);
 
-//		Users users2 = new Users();
-//		operations4.createWithConsole(users2);
+//		Users ñreateUserFromConsole = new Users();
+//		USER_OPERATIONS.createWithConsole(ñreateUserFromConsole);
 
-//		Users users3 = new Users();
-//		operationsUp.update(users3);
+//		Users updateUser = new Users("Will", "Smith", "1968-09-25", 4);
+//		USER_OPERATIONS.update(updateUser);
 
-//		Users users4 = new Users(4);
-//		operationsDel.delete(users4);
-
+//		Users deleteUser = new Users(5);
+//		USER_OPERATIONS.delete(deleteUser);
 	}
-
 }
