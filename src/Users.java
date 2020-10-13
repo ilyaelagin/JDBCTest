@@ -57,18 +57,18 @@ public class Users {
 
 	public static void main(String[] args) {
 
-//		USER_OPERATIONS.showUsersData();
+		USER_OPERATIONS.showUsersData();
 
-//		Users createUser = new Users("Will", "Smith", "1968-10-26", 4);
-//		USER_OPERATIONS.create(createUser);
+		Users createUser = new Users("Will", "Smith", "1968-10-26", 4);
+		USER_OPERATIONS.create(createUser);
 
-//		Users ñreateUserFromConsole = new Users();
-//		USER_OPERATIONS.createWithConsole(ñreateUserFromConsole);
+		Users createUserFromConsole = new Users();
+		USER_OPERATIONS.createWithConsole(createUserFromConsole);
 
-//		Users updateUser = new Users("Will", "Smith", "1968-09-25", 4);
-//		USER_OPERATIONS.update(updateUser);
+		Users updateUser = new Users("Will", "Smith", "1968-09-25", 4);
+		USER_OPERATIONS.update(updateUser);
 
-//		Users deleteUser = new Users(5);
-//		USER_OPERATIONS.delete(deleteUser);
+		Users deleteUser = new Users(5);
+		USER_OPERATIONS.delete(deleteUser);
 	}
 }

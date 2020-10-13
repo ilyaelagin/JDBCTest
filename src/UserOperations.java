@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class UserOperations {
-
 	public static final String url = "jdbc:postgresql://localhost:5432/test1";
 	public static final String login = "postgres";
 	public static final String password = "123";
@@ -59,7 +58,7 @@ public class UserOperations {
 
 			pstmt.executeUpdate();
 
-			System.out.println("Добавлен новый пользователь: " + users.getName() + " " + users.getSurname());
+			System.out.println("Р”РѕР±Р°РІР»РµРЅ РЅРѕРІС‹Р№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ: " + users.getName() + " " + users.getSurname());
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -71,31 +70,31 @@ public class UserOperations {
 		try (Scanner scanner = new Scanner(System.in)) {
 
 			while (true) {
-				System.out.print("Введите имя: ");
+				System.out.print("Р’РІРµРґРёС‚Рµ С„Р°РјРёР»РёСЋ:");
 				String name = scanner.nextLine();
-				if (name.matches("[а-яА-Яa-zA-z]+")) {
+				if (name.matches("[Р°-СЏРђ-РЇa-zA-z]+")) {
 					users.setName(name);
 					break;
 				} else {
-					System.out.println("Недопустимые символы в имени!");
+					System.out.println("РќРµРґРѕРїСѓСЃС‚РёРјС‹Рµ СЃРёРјРІРѕР»С‹ РІ С„Р°РјРёР»РёРё!");
 					continue;
 				}
 			}
 
 			while (true) {
-				System.out.print("Введите фамилию: ");
+				System.out.print("Р’РІРµРґРёС‚Рµ С„Р°РјРёР»РёСЋ: ");
 				String surname = scanner.nextLine();
-				if (surname.matches("[а-яА-Яa-zA-z]+")) {
+				if (surname.matches("[Р°-СЏРђ-РЇa-zA-z]+")) {
 					users.setSurname(surname);
 					break;
 				} else {
-					System.out.println("Недопустимые символы в фамилии!");
+					System.out.println("РќРµРґРѕРїСѓСЃС‚РёРјС‹Рµ СЃРёРјРІРѕР»С‹ РІ С„Р°РјРёР»РёРё!");
 					continue;
 				}
 			}
 
 			while (true) {
-				System.out.print("Введите дату рождения: ");
+				System.out.print("Р’РІРµРґРёС‚Рµ РґР°С‚Сѓ СЂРѕР¶РґРµРЅРёСЏ: ");
 				String birth = scanner.nextLine();
 				if (isValidFormat("yyyy-MM-dd", birth)) {
 					users.setBirth(birth);
@@ -106,7 +105,7 @@ public class UserOperations {
 			}
 
 			while (true) {
-				System.out.print("Введите id: ");
+				System.out.print("Р’РІРµРґРёС‚Рµ id: ");
 				int id = scanner.nextInt();
 				if (id >= 0) {
 					users.setId(id);
@@ -128,7 +127,7 @@ public class UserOperations {
 			pstmt.executeUpdate();
 
 			System.out.println();
-			System.out.println("Добавлен новый пользователь: " + users.getName() + " " + users.getSurname());
+			System.out.println("Р”РѕР±Р°РІР»РµРЅ РЅРѕРІС‹Р№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ: " + users.getName() + " " + users.getSurname());
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -142,10 +141,10 @@ public class UserOperations {
 			date = sdf.parse(value);
 			if (!value.equals(sdf.format(date))) {
 				date = null;
-				System.out.println("Некорректная дата.");
+				System.out.println("РќРµРєРѕСЂСЂРµРєС‚РЅР°СЏ РґР°С‚Р°.");
 			}
 		} catch (ParseException ex) {
-			System.out.println("Ошибка. Формат даты: 2020-12-31");
+			System.out.println("РћС€РёР±РєР°. Р¤РѕСЂРјР°С‚ РґР°С‚С‹: 2020-12-31");
 		}
 		return date != null;
 	}
@@ -163,7 +162,7 @@ public class UserOperations {
 
 			pstmt.executeUpdate();
 
-			System.out.println("Обновлены данные пользователя с id: " + users.getId());
+			System.out.println("РћР±РЅРѕРІР»РµРЅС‹ РґР°РЅРЅС‹Рµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ СЃ id: " + users.getId());
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -180,7 +179,7 @@ public class UserOperations {
 
 			pstmt.executeUpdate();
 
-			System.out.println("Удален пользователь c id: " + users.getId());
+			System.out.println("РЈРґР°Р»РµРЅ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ c id: " + users.getId());
 
 		} catch (SQLException e) {
 			e.printStackTrace();
