@@ -1,21 +1,45 @@
+import java.util.Scanner;
 
 public class Main {
 	public static final UserOperations USER_OPERATIONS = new UserOperations();
 	
 	public static void main(String[] args) {
 		
-		USER_OPERATIONS.showUsersData();
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Введите команду: ");
+		System.out.println("1 - просмотр всех пользователей");
+		System.out.println("2 - создание нового пользователя");
+		System.out.println("3 - обновление данных пользователя");
+		System.out.println("4 - удаление пользователя");
 		
-		USER_OPERATIONS.create(new User(70, "Will", "Smith", "1968-10-26"));
+		int num = scanner.nextInt();
+		
+		switch (num) {
+	
+		case 1:
+		 USER_OPERATIONS.showUsersData();
+		break;
+		
+//		USER_OPERATIONS.create(new User(70, "Will", "Smith", "1968-10-26"));
+//		USER_OPERATIONS.update(new User(14, 50, "Will", "Smith", "1968-09-25"));
 
+		case 2:
 		USER_OPERATIONS.createWithConsole(new User());
-
-		USER_OPERATIONS.update(new User(14, 50, "Will", "Smith", "1968-09-25"));
-
-		USER_OPERATIONS.delete(new User(23));
+		break;
 		
+		case 3:
 		USER_OPERATIONS.updateWithConsole(new User());
-
+		break;
+		
+		case 4:
+		USER_OPERATIONS.delete(new User());
+		break;
+		
+		default:
+			System.out.println("Такой команды не существует.");
+			break;
+		}
+		scanner.close();
 	}
 
 }

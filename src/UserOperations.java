@@ -6,8 +6,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import org.postgresql.util.PSQLException;
@@ -78,16 +80,28 @@ public class UserOperations {
 			while (true) {
 				System.out.print("Введите tabnum(табельный номер): ");
 				int tabnum = scanner.nextInt();
+				Statement stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery("SELECT tabnum FROM users WHERE tabnum = " + tabnum + ";");
+
+				if (rs.next()) {
+					System.out.println("Значение tabnum:" + tabnum + " уже есть в базе! Введите уникальное значение.");
+					continue;
+				} else {
+					user.setTabnum(tabnum);
+				}
+
 				if (tabnum >= 0) {
 					user.setTabnum(tabnum);
 					break;
 				} else {
+					System.out.println("Отрицательный tabnum недопустим.");
 					continue;
 				}
 			}
 
 			while (true) {
 				System.out.print("Введите имя: ");
+				scanner.nextLine();
 				String name = scanner.nextLine();
 				if (name.matches(NAME_PATTERN)) {
 					user.setName(name);
@@ -129,11 +143,19 @@ public class UserOperations {
 			pstmt.setString(2, user.getName());
 			pstmt.setString(3, user.getSurname());
 			pstmt.setDate(4, java.sql.Date.valueOf(user.getBirth()));
-
 			pstmt.executeUpdate();
 
-			System.out.println("\nДобавлен новый пользователь: " + user);
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT id FROM users WHERE tabnum = " + user.getTabnum() + ";");
+			rs.next();
+			System.out.println("\nДобавлен новый пользователь: " + "id:" + rs.getInt("id") + " tabnum:"
+					+ user.getTabnum() + " " + user.getName() + " " + user.getSurname() + " " + user.getBirth());
 
+		} catch (PSQLException e) {
+			e.printStackTrace();
+			System.out.println("Ошибка ввода. Табельный номер должен быть уникальным!");
+		} catch (InputMismatchException e) {
+			System.out.println("Введены нечисловые данные!");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -154,29 +176,42 @@ public class UserOperations {
 		return date != null;
 	}
 
-	void update(User user) {
-
-		try {
-			String sql2 = "UPDATE users SET tabnum = ?, name = ?, surname = ?, date_of_birth = ? WHERE id = ?";
-			PreparedStatement pstmt = con.prepareStatement(sql2);
-
-			pstmt.setInt(1, user.getTabnum());
-			pstmt.setString(2, user.getName());
-			pstmt.setString(3, user.getSurname());
-			pstmt.setDate(4, java.sql.Date.valueOf(user.getBirth()));
-			pstmt.setInt(5, user.getId());
-
-			pstmt.executeUpdate();
-
-			System.out.println("Обновлены данные пользователя: " + user);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+//	void update(User user) {
+//
+//		try {
+//			String sql2 = "UPDATE users SET tabnum = ?, name = ?, surname = ?, date_of_birth = ? WHERE id = ?";
+//			PreparedStatement pstmt = con.prepareStatement(sql2);
+//
+//			pstmt.setInt(1, user.getTabnum());
+//			pstmt.setString(2, user.getName());
+//			pstmt.setString(3, user.getSurname());
+//			pstmt.setDate(4, java.sql.Date.valueOf(user.getBirth()));
+//			pstmt.setInt(5, user.getId());
+//
+//			pstmt.executeUpdate();
+//
+//			System.out.println("Обновлены данные пользователя: " + user);
+//
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	void delete(User user) {
-		try {
+		try (Scanner scanner = new Scanner(System.in)) {
+
+			while (true) {
+				System.out.print("Удаление пользователя. Введите id: ");
+				int id = scanner.nextInt();
+				if (id >= 0) {
+					user.setId(id);
+					break;
+				} else {
+					System.out.println("Введен отрицательный id.");
+					continue;
+				}
+			}
+
 			String sql3 = "SELECT * FROM users WHERE id = ?";
 			String sql4 = "DELETE FROM users WHERE id = ?";
 
@@ -192,7 +227,8 @@ public class UserOperations {
 				pstmt2.executeUpdate();
 				System.out.println("Удален пользователь c id:" + user.getId());
 			}
-
+		} catch (InputMismatchException e) {
+			System.out.println("Введен нечисловой id!");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -302,6 +338,7 @@ public class UserOperations {
 
 		} catch (PSQLException e) {
 			System.out.println("Табельный номер должен быть уникальным.");
+			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
