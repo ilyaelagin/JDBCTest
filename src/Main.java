@@ -6,7 +6,7 @@ public class Main {
 	public static void main(String[] args) {
 		
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("Введите команду: ");
+		System.out.println("Введите команду и нажмите Enter: ");
 		System.out.println("1 - просмотр всех пользователей");
 		System.out.println("2 - создание нового пользователя");
 		System.out.println("3 - обновление данных пользователя");
@@ -20,8 +20,6 @@ public class Main {
 		 USER_OPERATIONS.showUsersData();
 		break;
 		
-//		USER_OPERATIONS.create(new User(70, "Will", "Smith", "1968-10-26"));
-//		USER_OPERATIONS.update(new User(14, 50, "Will", "Smith", "1968-09-25"));
 
 		case 2:
 		USER_OPERATIONS.createWithConsole(new User());
@@ -34,6 +32,14 @@ public class Main {
 		case 4:
 		USER_OPERATIONS.delete(new User());
 		break;
+		
+//		case 5:
+//		USER_OPERATIONS.create(new User(70, "Will", "Smith", "1968-10-26"));
+//		break;
+		
+//		case 6:
+//		USER_OPERATIONS.update(new User(14, 50, "Will", "Smith", "1968-09-25"));
+//		break;
 		
 		default:
 			System.out.println("Такой команды не существует.");

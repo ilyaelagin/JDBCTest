@@ -6,10 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
 
 import org.postgresql.util.PSQLException;
@@ -21,6 +19,9 @@ public class UserOperations {
 
 	public static final String NAME_PATTERN = "[а-яА-Яa-zA-z]+(\\s|-)?([а-яА-Яa-zA-z]+)?";
 	public static final String DATE_PATTERN = "yyyy-MM-dd";
+	public static final String INT_PATTERN = "-?\\d+";
+	public static final String NO_PATTERN = "no";
+	public static final String YES_PATTERN = "yes";
 
 	private Connection con;
 
@@ -53,33 +54,18 @@ public class UserOperations {
 		}
 	}
 
-	void create(User user) {
-		try {
-			String sql1 = "INSERT INTO users(tabnum, name, surname, date_of_birth) VALUES(?, ?, ?, ?)";
-
-			PreparedStatement pstmt = con.prepareStatement(sql1);
-
-			pstmt.setInt(1, user.getTabnum());
-			pstmt.setString(2, user.getName());
-			pstmt.setString(3, user.getSurname());
-			pstmt.setDate(4, java.sql.Date.valueOf(user.getBirth()));
-
-			pstmt.executeUpdate();
-
-			System.out.println("Добавлен новый пользователь: " + user);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
 	void createWithConsole(User user) {
 
 		try (Scanner scanner = new Scanner(System.in)) {
 
 			while (true) {
 				System.out.print("Введите tabnum(табельный номер): ");
-				int tabnum = scanner.nextInt();
+				String tm = scanner.nextLine().trim();
+				if (!tm.matches(INT_PATTERN)) {
+					System.out.println("Табельный номер должен быть числовой!");
+					continue;
+				}
+				int tabnum = Integer.parseInt(tm);
 				Statement stmt = con.createStatement();
 				ResultSet rs = stmt.executeQuery("SELECT tabnum FROM users WHERE tabnum = " + tabnum + ";");
 
@@ -94,14 +80,14 @@ public class UserOperations {
 					user.setTabnum(tabnum);
 					break;
 				} else {
-					System.out.println("Отрицательный tabnum недопустим.");
+					System.out.println("Отрицательный tabnum недопускается!");
 					continue;
 				}
 			}
 
 			while (true) {
 				System.out.print("Введите имя: ");
-				scanner.nextLine();
+
 				String name = scanner.nextLine();
 				if (name.matches(NAME_PATTERN)) {
 					user.setName(name);
@@ -153,9 +139,8 @@ public class UserOperations {
 
 		} catch (PSQLException e) {
 			e.printStackTrace();
-			System.out.println("Ошибка ввода. Табельный номер должен быть уникальным!");
 		} catch (InputMismatchException e) {
-			System.out.println("Введены нечисловые данные!");
+			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -176,77 +161,32 @@ public class UserOperations {
 		return date != null;
 	}
 
-//	void update(User user) {
-//
-//		try {
-//			String sql2 = "UPDATE users SET tabnum = ?, name = ?, surname = ?, date_of_birth = ? WHERE id = ?";
-//			PreparedStatement pstmt = con.prepareStatement(sql2);
-//
-//			pstmt.setInt(1, user.getTabnum());
-//			pstmt.setString(2, user.getName());
-//			pstmt.setString(3, user.getSurname());
-//			pstmt.setDate(4, java.sql.Date.valueOf(user.getBirth()));
-//			pstmt.setInt(5, user.getId());
-//
-//			pstmt.executeUpdate();
-//
-//			System.out.println("Обновлены данные пользователя: " + user);
-//
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//	}
-
-	void delete(User user) {
-		try (Scanner scanner = new Scanner(System.in)) {
-
-			while (true) {
-				System.out.print("Удаление пользователя. Введите id: ");
-				int id = scanner.nextInt();
-				if (id >= 0) {
-					user.setId(id);
-					break;
-				} else {
-					System.out.println("Введен отрицательный id.");
-					continue;
-				}
-			}
-
-			String sql3 = "SELECT * FROM users WHERE id = ?";
-			String sql4 = "DELETE FROM users WHERE id = ?";
-
-			PreparedStatement pstmt1 = con.prepareStatement(sql3);
-			pstmt1.setInt(1, user.getId());
-			ResultSet rs = pstmt1.executeQuery();
-
-			if (!rs.next()) {
-				System.out.println("Пользователь с id:" + user.getId() + " не найден.");
-			} else {
-				PreparedStatement pstmt2 = con.prepareStatement(sql4);
-				pstmt2.setInt(1, user.getId());
-				pstmt2.executeUpdate();
-				System.out.println("Удален пользователь c id:" + user.getId());
-			}
-		} catch (InputMismatchException e) {
-			System.out.println("Введен нечисловой id!");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
 	void updateWithConsole(User user) {
 
 		try (Scanner scanner = new Scanner(System.in)) {
 
 			while (true) {
 				System.out.print("Изменение данных пользователя. Введите id: ");
-				int id = scanner.nextInt();
+				String i = scanner.nextLine().trim();
+				if (!i.matches(INT_PATTERN)) {
+					System.out.println("id должен быть числовой!");
+					continue;
+				}
+				int id = Integer.parseInt(i);
 				if (id >= 0) {
 					user.setId(id);
-					break;
 				} else {
-					System.out.println("Введен отрицательный id.");
+					System.out.println("Введен отрицательный id!");
 					continue;
+				}
+				Statement stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery("SELECT id FROM users WHERE id = " + id + ";");
+
+				if (!rs.next()) {
+					System.out.println("Пользователь с id:" + id + " не найден!");
+					continue;
+				} else {
+					break;
 				}
 			}
 
@@ -334,13 +274,119 @@ public class UserOperations {
 			System.out.println("\nОбновлены данные пользователя: " + userDB);
 
 		} catch (InputMismatchException e) {
-			System.out.println("Введены нечисловые данные.");
-
+			e.printStackTrace();
+			;
 		} catch (PSQLException e) {
-			System.out.println("Табельный номер должен быть уникальным.");
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
+
+	void delete(User user) {
+		try (Scanner scanner = new Scanner(System.in); Scanner scanner2 = new Scanner(System.in)) {
+
+			while (true) {
+				System.out.print("Удаление пользователя. Введите id: ");
+				String i = scanner.nextLine().trim();
+				if (!i.matches(INT_PATTERN)) {
+					System.out.println("id должен быть числовой!");
+					continue;
+				}
+				int id = Integer.parseInt(i);
+				if (id >= 0) {
+					user.setId(id);
+				} else {
+					System.out.println("Введен отрицательный id!");
+					continue;
+				}
+				Statement stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery("SELECT id FROM users WHERE id = " + id + ";");
+
+				if (!rs.next()) {
+					System.out.println("Пользователь с id:" + id + " не найден!");
+					continue;
+				} else {
+					break;
+				}
+			}
+
+			String sql3 = "SELECT * FROM users WHERE id = ?";
+			PreparedStatement pstmt1 = con.prepareStatement(sql3);
+			pstmt1.setInt(1, user.getId());
+			ResultSet rs = pstmt1.executeQuery();
+			while (rs.next()) {
+				String str = "id:" + rs.getInt("id") + " " + "tabnum:" + rs.getInt("tabnum") + " "
+						+ rs.getString("name") + " " + rs.getString("surname") + " " + rs.getString("date_of_birth");
+				System.out.println(str);
+			}
+
+			while (true) {
+				System.out.println("Подтвердите удаление пользователя (yes/no):");
+				String response = scanner2.nextLine().trim();
+
+				if (response.matches(NO_PATTERN)) {
+					System.out.println("Отмена удаления пользователя!");
+					break;
+
+				} else if (response.matches(YES_PATTERN)) {
+					String sql4 = "DELETE FROM users WHERE id = ?";
+					PreparedStatement pstmt = con.prepareStatement(sql4);
+					pstmt.setInt(1, user.getId());
+					pstmt.executeUpdate();
+					System.out.print("Удален пользователь c id:" + user.getId());
+					break;
+
+				} else {
+					System.out.println("Введите yes или no!");
+					continue;
+				}
+			}
+		} catch (InputMismatchException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+//	void create(User user) {
+//		try {
+//			String sql1 = "INSERT INTO users(tabnum, name, surname, date_of_birth) VALUES(?, ?, ?, ?)";
+//
+//			PreparedStatement pstmt = con.prepareStatement(sql1);
+//
+//			pstmt.setInt(1, user.getTabnum());
+//			pstmt.setString(2, user.getName());
+//			pstmt.setString(3, user.getSurname());
+//			pstmt.setDate(4, java.sql.Date.valueOf(user.getBirth()));
+//
+//			pstmt.executeUpdate();
+//
+//			System.out.println("Добавлен новый пользователь: " + user);
+//
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//	}
+
+//	void update(User user) {
+//
+//		try {
+//			String sql2 = "UPDATE users SET tabnum = ?, name = ?, surname = ?, date_of_birth = ? WHERE id = ?";
+//			PreparedStatement pstmt = con.prepareStatement(sql2);
+//
+//			pstmt.setInt(1, user.getTabnum());
+//			pstmt.setString(2, user.getName());
+//			pstmt.setString(3, user.getSurname());
+//			pstmt.setDate(4, java.sql.Date.valueOf(user.getBirth()));
+//			pstmt.setInt(5, user.getId());
+//
+//			pstmt.executeUpdate();
+//
+//			System.out.println("Обновлены данные пользователя: " + user);
+//
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//	}
 }
