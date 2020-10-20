@@ -348,45 +348,4 @@ public class UserOperations {
 			e.printStackTrace();
 		}
 	}
-
-//	void create(User user) {
-//		try {
-//			String sql1 = "INSERT INTO users(tabnum, name, surname, date_of_birth) VALUES(?, ?, ?, ?)";
-//
-//			PreparedStatement pstmt = con.prepareStatement(sql1);
-//
-//			pstmt.setInt(1, user.getTabnum());
-//			pstmt.setString(2, user.getName());
-//			pstmt.setString(3, user.getSurname());
-//			pstmt.setDate(4, java.sql.Date.valueOf(user.getBirth()));
-//
-//			pstmt.executeUpdate();
-//
-//			System.out.println("Добавлен новый пользователь: " + user);
-//
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//	}
-
-//	void update(User user) {
-//
-//		try {
-//			String sql2 = "UPDATE users SET tabnum = ?, name = ?, surname = ?, date_of_birth = ? WHERE id = ?";
-//			PreparedStatement pstmt = con.prepareStatement(sql2);
-//
-//			pstmt.setInt(1, user.getTabnum());
-//			pstmt.setString(2, user.getName());
-//			pstmt.setString(3, user.getSurname());
-//			pstmt.setDate(4, java.sql.Date.valueOf(user.getBirth()));
-//			pstmt.setInt(5, user.getId());
-//
-//			pstmt.executeUpdate();
-//
-//			System.out.println("Обновлены данные пользователя: " + user);
-//
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//	}
 }

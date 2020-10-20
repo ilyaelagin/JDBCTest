@@ -7,19 +7,19 @@ public class User {
 	private String name;
 	private String surname;
 	private String birth;
-	
+
 	public int getId() {
 		return id;
 	}
-	
+
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public int getTabnum() {
 		return tabnum;
 	}
-	
+
 	public void setTabnum(int tabnum) {
 		this.tabnum = tabnum;
 	}
@@ -47,7 +47,7 @@ public class User {
 	public void setBirth(String birth) {
 		this.birth = birth;
 	}
-	
+
 	public User(ResultSet rs) throws SQLException {
 		this.id = rs.getInt("id");
 		this.tabnum = rs.getInt("tabnum");
