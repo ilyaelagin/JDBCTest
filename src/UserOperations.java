@@ -23,6 +23,8 @@ public class UserOperations {
 	public static final String NO_PATTERN = "no";
 	public static final String YES_PATTERN = "yes";
 
+	Scanner scanner = new Scanner(System.in);
+
 	private Connection con;
 
 	public UserOperations() {
@@ -56,39 +58,32 @@ public class UserOperations {
 
 	void createWithConsole(User user) {
 
-		try (Scanner scanner = new Scanner(System.in)) {
-
+		try {
 			while (true) {
 				System.out.print("Введите tabnum(табельный номер): ");
-				String tm = scanner.nextLine().trim();
-				if (!tm.matches(INT_PATTERN)) {
+				String tn = scanner.nextLine().trim();
+				if (!tn.matches(INT_PATTERN)) {
 					System.out.println("Табельный номер должен быть числовой!");
 					continue;
 				}
-				int tabnum = Integer.parseInt(tm);
+				int tabnum = Integer.parseInt(tn);
 				Statement stmt = con.createStatement();
 				ResultSet rs = stmt.executeQuery("SELECT tabnum FROM users WHERE tabnum = " + tabnum + ";");
-
 				if (rs.next()) {
 					System.out.println("Значение tabnum:" + tabnum + " уже есть в базе! Введите уникальное значение.");
 					continue;
-				} else {
-					user.setTabnum(tabnum);
-				}
-
-				if (tabnum >= 0) {
+				} else if (tabnum > 0) {
 					user.setTabnum(tabnum);
 					break;
 				} else {
-					System.out.println("Отрицательный tabnum недопускается!");
+					System.out.println("tabnum должен быть больше нуля!");
 					continue;
 				}
 			}
 
 			while (true) {
 				System.out.print("Введите имя: ");
-
-				String name = scanner.nextLine();
+				String name = scanner.nextLine().trim();
 				if (name.matches(NAME_PATTERN)) {
 					user.setName(name);
 					break;
@@ -100,7 +95,7 @@ public class UserOperations {
 
 			while (true) {
 				System.out.print("Введите фамилию: ");
-				String surname = scanner.nextLine();
+				String surname = scanner.nextLine().trim();
 				if (surname.matches(NAME_PATTERN)) {
 					user.setSurname(surname);
 					break;
@@ -112,7 +107,7 @@ public class UserOperations {
 
 			while (true) {
 				System.out.print("Введите дату рождения: ");
-				String birth = scanner.nextLine();
+				String birth = scanner.nextLine().trim();
 				if (isValidFormat(birth)) {
 					user.setBirth(birth);
 					break;
@@ -121,16 +116,14 @@ public class UserOperations {
 				}
 			}
 
-			String sql1 = "INSERT INTO users(tabnum, name, surname, date_of_birth) VALUES(?, ?, ?, ?)";
+			String sql = "INSERT INTO users(tabnum, name, surname, date_of_birth) VALUES(?, ?, ?, ?)";
 
-			PreparedStatement pstmt = con.prepareStatement(sql1);
-
+			PreparedStatement pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, user.getTabnum());
 			pstmt.setString(2, user.getName());
 			pstmt.setString(3, user.getSurname());
 			pstmt.setDate(4, java.sql.Date.valueOf(user.getBirth()));
 			pstmt.executeUpdate();
-
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT id FROM users WHERE tabnum = " + user.getTabnum() + ";");
 			rs.next();
@@ -162,8 +155,7 @@ public class UserOperations {
 	}
 
 	void updateWithConsole(User user) {
-
-		try (Scanner scanner = new Scanner(System.in)) {
+		try {
 
 			while (true) {
 				System.out.print("Изменение данных пользователя. Введите id: ");
@@ -173,10 +165,10 @@ public class UserOperations {
 					continue;
 				}
 				int id = Integer.parseInt(i);
-				if (id >= 0) {
+				if (id > 0) {
 					user.setId(id);
 				} else {
-					System.out.println("Введен отрицательный id!");
+					System.out.println("id должен быть больше нуля!");
 					continue;
 				}
 				Statement stmt = con.createStatement();
@@ -190,42 +182,56 @@ public class UserOperations {
 				}
 			}
 
-			String sql10 = "SELECT * FROM users WHERE id = ?;";
-			PreparedStatement pstmt = con.prepareStatement(sql10);
-			pstmt.setInt(1, user.getId());
-			ResultSet rs = pstmt.executeQuery();
+			String sql1 = "SELECT * FROM users WHERE id = ?;";
+			PreparedStatement pstmt1 = con.prepareStatement(sql1);
+			pstmt1.setInt(1, user.getId());
+			ResultSet rs1 = pstmt1.executeQuery();
 
-			if (rs.next()) {
-				String str = "id:" + rs.getInt("id") + " " + "tabnum:" + rs.getInt("tabnum") + " "
-						+ rs.getString("name") + " " + rs.getString("surname") + " " + rs.getString("date_of_birth");
+			if (rs1.next()) {
+				String str = "id:" + rs1.getInt("id") + " " + "tabnum:" + rs1.getInt("tabnum") + " "
+						+ rs1.getString("name") + " " + rs1.getString("surname") + " " + rs1.getString("date_of_birth");
 				System.out.println(str);
 			} else {
 				System.out.println("Пользователь с id:" + user.getId() + " не найден.");
 			}
 
-			User userDB = new User(rs);
+			User userDB = new User(rs1);
 
 			while (true) {
 				System.out.print("\nВведите новый tabnum (или нажмите Enter, чтобы оставить старое значение): ");
-				scanner.nextLine();
-				String tabnum = (String) scanner.nextLine();
-				if ("".equals(tabnum)) {
+				String tn = scanner.nextLine().trim();
+				if ("".equals(tn)) {
+					System.out.println("Установлено старое значение.\n");
 					break;
-				} else if (Integer.parseInt(tabnum) >= 0) {
-					userDB.setTabnum(Integer.parseInt(tabnum));
-					break;
-				} else {
+				} else if (!tn.matches(INT_PATTERN)) {
+					System.out.println("Табельный номер должен быть числовой!");
 					continue;
+				} else if (Integer.parseInt(tn) < 0) {
+					System.out.println("tabnum должен быть больше нуля!");
+					continue;
+				}
+
+				int tabnum = Integer.parseInt(tn);
+				Statement stmt = con.createStatement();
+				ResultSet rs2 = stmt.executeQuery("SELECT tabnum FROM users WHERE tabnum = " + tabnum + ";");
+				if (rs2.next()) {
+					System.out.println("Значение tabnum:" + tabnum
+							+ " уже есть в базе! Введите уникальное значение. Или нажмите Enter, чтобы оставить старое значение.");
+					continue;
+				} else {
+					userDB.setTabnum(tabnum);
+					break;
 				}
 			}
 
 			while (true) {
 				System.out.print("Введите имя (или нажмите Enter, чтобы оставить старое значение): ");
-				String name = scanner.nextLine();
+				String name = scanner.nextLine().trim();
 				if (name.matches(NAME_PATTERN)) {
 					userDB.setName(name);
 					break;
 				} else if ("".equals(name)) {
+					System.out.println("Установлено старое значение.\n");
 					break;
 				} else {
 					System.out.println("Недопустимые символы в имени!");
@@ -235,11 +241,12 @@ public class UserOperations {
 
 			while (true) {
 				System.out.print("Введите фамилию (или нажмите Enter, чтобы оставить старое значение): ");
-				String surname = scanner.nextLine();
+				String surname = scanner.nextLine().trim();
 				if (surname.matches(NAME_PATTERN)) {
 					userDB.setSurname(surname);
 					break;
 				} else if ("".equals(surname)) {
+					System.out.println("Установлено старое значение.\n");
 					break;
 				} else {
 					System.out.println("Недопустимые символы в фамилии!");
@@ -249,8 +256,9 @@ public class UserOperations {
 
 			while (true) {
 				System.out.print("Введите дату рождения (или нажмите Enter, чтобы оставить старое значение): ");
-				String birth = scanner.nextLine();
+				String birth = scanner.nextLine().trim();
 				if ("".equals(birth)) {
+					System.out.println("Установлено старое значение.\n");
 					break;
 				} else if (isValidFormat(birth)) {
 					userDB.setBirth(birth);
@@ -260,22 +268,20 @@ public class UserOperations {
 				}
 			}
 
-			String sql1 = "UPDATE users SET tabnum = ?, name = ?, surname = ?, date_of_birth = ? WHERE id ="
-					+ rs.getInt("id") + ";";
+			String sql2 = "UPDATE users SET tabnum = ?, name = ?, surname = ?, date_of_birth = ? WHERE id ="
+					+ rs1.getInt("id") + ";";
 
-			PreparedStatement pstmt2 = con.prepareStatement(sql1);
-
+			PreparedStatement pstmt2 = con.prepareStatement(sql2);
 			pstmt2.setInt(1, userDB.getTabnum());
 			pstmt2.setString(2, userDB.getName());
 			pstmt2.setString(3, userDB.getSurname());
 			pstmt2.setDate(4, java.sql.Date.valueOf(userDB.getBirth()));
 			pstmt2.executeUpdate();
 
-			System.out.println("\nОбновлены данные пользователя: " + userDB);
+			System.out.println("\nОбновлены данные пользователя: \n" + userDB);
 
 		} catch (InputMismatchException e) {
 			e.printStackTrace();
-			;
 		} catch (PSQLException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -284,8 +290,7 @@ public class UserOperations {
 	}
 
 	void delete(User user) {
-		try (Scanner scanner = new Scanner(System.in); Scanner scanner2 = new Scanner(System.in)) {
-
+		try {
 			while (true) {
 				System.out.print("Удаление пользователя. Введите id: ");
 				String i = scanner.nextLine().trim();
@@ -294,10 +299,10 @@ public class UserOperations {
 					continue;
 				}
 				int id = Integer.parseInt(i);
-				if (id >= 0) {
+				if (id > 0) {
 					user.setId(id);
 				} else {
-					System.out.println("Введен отрицательный id!");
+					System.out.println("id должен быть больше нуля!");
 					continue;
 				}
 				Statement stmt = con.createStatement();
@@ -311,8 +316,8 @@ public class UserOperations {
 				}
 			}
 
-			String sql3 = "SELECT * FROM users WHERE id = ?";
-			PreparedStatement pstmt1 = con.prepareStatement(sql3);
+			String sql1 = "SELECT * FROM users WHERE id = ?";
+			PreparedStatement pstmt1 = con.prepareStatement(sql1);
 			pstmt1.setInt(1, user.getId());
 			ResultSet rs = pstmt1.executeQuery();
 			while (rs.next()) {
@@ -322,19 +327,19 @@ public class UserOperations {
 			}
 
 			while (true) {
-				System.out.println("Подтвердите удаление пользователя (yes/no):");
-				String response = scanner2.nextLine().trim();
+				System.out.print("\nПодтвердите удаление пользователя (yes/no): ");
+				String response = scanner.nextLine();
 
 				if (response.matches(NO_PATTERN)) {
 					System.out.println("Отмена удаления пользователя!");
 					break;
 
 				} else if (response.matches(YES_PATTERN)) {
-					String sql4 = "DELETE FROM users WHERE id = ?";
-					PreparedStatement pstmt = con.prepareStatement(sql4);
-					pstmt.setInt(1, user.getId());
-					pstmt.executeUpdate();
-					System.out.print("Удален пользователь c id:" + user.getId());
+					String sql2 = "DELETE FROM users WHERE id = ?";
+					PreparedStatement pstmt2 = con.prepareStatement(sql2);
+					pstmt2.setInt(1, user.getId());
+					pstmt2.executeUpdate();
+					System.out.println("Удален пользователь c id:" + user.getId());
 					break;
 
 				} else {
@@ -342,6 +347,7 @@ public class UserOperations {
 					continue;
 				}
 			}
+
 		} catch (InputMismatchException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
