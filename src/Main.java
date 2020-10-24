@@ -44,6 +44,7 @@ public class Main {
 				if (question.matches("")) {
 					continue;
 				} else {
+					System.out.println("Работа завершена.");
 					break;
 				}
 
