@@ -1,3 +1,4 @@
+package standart;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -47,35 +48,19 @@ public class User {
 	public void setBirth(String birth) {
 		this.birth = birth;
 	}
+	
+	public User() {
+		
+	}
 
 	public User(ResultSet rs) throws SQLException {
-		this.id = rs.getInt("id");
-		this.tabnum = rs.getInt("tabnum");
-		this.name = rs.getString("name");
-		this.surname = rs.getString("surname");
-		this.birth = rs.getString("date_of_birth");
-	}
-
-	public User(int id, int tabnum, String name, String surname, String birth) {
-		this.id = id;
-		this.tabnum = tabnum;
-		this.name = name;
-		this.surname = surname;
-		this.birth = birth;
-	}
-
-	public User(int tabnum, String name, String surname, String birth) {
-		this.tabnum = tabnum;
-		this.name = name;
-		this.surname = surname;
-		this.birth = birth;
-	}
-
-	public User(int id) {
-		this.id = id;
-	}
-
-	public User() {
+		if (rs != null) {
+			this.id = rs.getInt("id");
+			this.tabnum = rs.getInt("tabnum");
+			this.name = rs.getString("name");
+			this.surname = rs.getString("surname");
+			this.birth = rs.getString("date_of_birth");
+		}
 	}
 
 	@Override
