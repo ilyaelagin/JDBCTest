@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class ConsoleCreateMenu extends Console {
 
 	private final UserOperations USER_OPERATIONS = new UserOperations();
+	Scanner scanner = new Scanner(System.in);
 
 	@Override
 	public void operate() {
@@ -19,7 +20,6 @@ public class ConsoleCreateMenu extends Console {
 	}
 
 	private String getTabnumConsoleInput() {
-		try (Scanner scanner = new Scanner(System.in)) {
 			while (true) {
 				System.out.print("Введите tabnum(табельный номер): ");
 				String value = scanner.nextLine().trim();
@@ -34,11 +34,9 @@ public class ConsoleCreateMenu extends Console {
 				}
 				return value;
 			}
-		}
 	}
 
 	private String getNameConsoleInput() {
-		try (Scanner scanner = new Scanner(System.in)) {
 			while (true) {
 				System.out.print("Введите имя: ");
 				String value = scanner.nextLine().trim();
@@ -48,11 +46,9 @@ public class ConsoleCreateMenu extends Console {
 				}
 				return value;
 			}
-		}
 	}
 
 	private String getSurnameConsoleInput() {
-		try (Scanner scanner = new Scanner(System.in)) {
 			while (true) {
 				System.out.print("Введите фамилию: ");
 				String value = scanner.nextLine().trim();
@@ -62,11 +58,9 @@ public class ConsoleCreateMenu extends Console {
 				}
 				return value;
 			}
-		}
 	}
 
 	private String getBirthConsoleInput() {
-		try (Scanner scanner = new Scanner(System.in)) {
 			while (true) {
 				System.out.print("Введите дату рождения: ");
 				String value = scanner.nextLine().trim();
@@ -76,8 +70,8 @@ public class ConsoleCreateMenu extends Console {
 				}
 				return value;
 			}
-		}
 	}
+	
 
 	private void enterTabnum(User user) {
 		String inputValue = getTabnumConsoleInput();
