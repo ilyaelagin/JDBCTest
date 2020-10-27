@@ -6,9 +6,10 @@ import service.UserOperations;
 public class ConsoleMainMenu extends Console {
 	private static final UserOperations USER_OPERATIONS = new UserOperations();
 	private static final ConsoleCreateMenu CONSOLE_CREATE_MENU = new ConsoleCreateMenu();
-//	private static final ConsoleUpdateMenu CONSOLE_UPDATE_MENU = new ConsoleUpdateMenu();
-//	private static final ConsoleDeleteMenu CONSOLE_DELETE_MENU = new ConsoleDeleteMenu();
-	private static final String INT_PATTERN = "1|2|3|4";
+	private static final ConsoleUpdateMenu CONSOLE_UPDATE_MENU = new ConsoleUpdateMenu();
+	private static final ConsoleDeleteMenu CONSOLE_DELETE_MENU = new ConsoleDeleteMenu();
+	private static final ConsoleShowOneUser CONSOLE_SHOW_USER = new ConsoleShowOneUser();
+	private static final String INT_PATTERN = "1|2|3|4|5";
 
 	@Override
 	public void operate() {
@@ -19,6 +20,7 @@ public class ConsoleMainMenu extends Console {
 				System.out.println("2 - создание нового пользователя");
 				System.out.println("3 - обновление данных пользователя");
 				System.out.println("4 - удаление пользователя");
+				System.out.println("5 - просмотр конкретного пользователя");
 				System.out.print("Команда: ");
 
 				String n = scanner.nextLine().trim();
@@ -35,12 +37,15 @@ public class ConsoleMainMenu extends Console {
 				case "2":
 					CONSOLE_CREATE_MENU.operate();
 					break;
-//				case "3":
-//					CONSOLE_UPDATE_MENU.operate();
-//					break;
-//				case "4":
-//					CONSOLE_DELETE_MENU.operate();
-//					break;
+				case "3":
+					CONSOLE_UPDATE_MENU.operate();
+					break;
+				case "4":
+					CONSOLE_DELETE_MENU.operate();
+					break;
+				case "5":
+					CONSOLE_SHOW_USER.operate();
+					break;
 				}
 
 				System.out.print("\nВведите любую клавишу и нажмите Enter для завершения работы. Или нажмите Enter чтобы продолжить: ");

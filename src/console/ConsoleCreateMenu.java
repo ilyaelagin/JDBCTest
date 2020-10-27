@@ -72,7 +72,7 @@ public class ConsoleCreateMenu extends Console {
 			}
 	}
 	
-
+	
 	private void enterTabnum(User user) {
 		String inputValue = getTabnumConsoleInput();
 		user.setTabnum(Integer.parseInt(inputValue));

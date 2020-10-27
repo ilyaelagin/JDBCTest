@@ -5,7 +5,7 @@ import java.util.Scanner;
 import dto.User;
 import service.UserOperations;
 
-public class ConsoleDeleteMenu extends Console {
+public class ConsoleShowOneUser extends Console {
 
 	private final UserOperations USER_OPERATIONS = new UserOperations();
 	Scanner scanner = new Scanner(System.in);
@@ -14,12 +14,12 @@ public class ConsoleDeleteMenu extends Console {
 	protected void operate() {
 		User user = new User();
 		enterId(user);
-		USER_OPERATIONS.deleteUser(user);
+		USER_OPERATIONS.showUser(user);
 	}
 	
 	private String getIdConsoleInput() {
 		while (true) {
-			System.out.print("Удаление пользователя. Введите id: ");
+			System.out.print("Просмотр пользователя. Введите id: ");
 			String value = scanner.nextLine().trim();
 			if (!value.matches(INT_PATTERN)) {
 				System.out.println("id должен быть числовой!");
