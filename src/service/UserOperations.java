@@ -20,16 +20,12 @@ public class UserOperations {
 	public void showUsersData() {
 		repository.getAll().forEach(System.out::println);
 	}
-	
-	public void showUserData() {
-		repository.getOne().forEach(System.out::println);
-	}
 
-	public Integer getTabnumByTabnum(Integer tabnum) {
+	public Integer getTabnumByTabnum(int tabnum) {
 		return repository.getTabnumByTabnum(tabnum);
 	}
 	
-	public Integer getIdById(Integer id) {
+	public Integer getIdById(int id) {
 		return repository.getIdById(id);
 	}
 
@@ -43,8 +39,25 @@ public class UserOperations {
 		}
 	}
 	public void updateUser(User user) {
-		repository.update(user);
-		User updateUser = repository.getUserByTabnum(user.getTabnum());
+		User userFromDb = repository.getUserById(user.getId());
+		if(userFromDb == null) {
+			System.out.println("Ошибка обновления данных.");
+			return;
+		}
+		if(user.getTabnum() != 0) {
+			userFromDb.setTabnum(user.getTabnum());
+		}
+		if(user.getName() != null) {
+			userFromDb.setName(user.getName());
+		}
+		if(user.getSurname() != null) {
+			userFromDb.setSurname(user.getSurname());
+		}
+		if(user.getBirth() != null) {
+			userFromDb.setBirth(user.getBirth());
+		}
+		repository.update(userFromDb);
+		User updateUser = repository.getUserById(user.getId());
 		if (updateUser == null) {
 			System.out.println("\nЧто-то пошло не так, данные пользователя не удалось обновить: " + user);
 		} else {
@@ -53,31 +66,30 @@ public class UserOperations {
 	}
 	public void showUser(User user) {
 		repository.show(user);
-		User showUser = repository.getUserByIdOneUser(user.getId());
+		User showUser = repository.getUserById(user.getId());
 		if (showUser == null) {
 			System.out.println("\nЧто-то пошло не так и пользователя не удалось показать: " + user);
 		} else {
 			System.out.println("\nПользователь: " + showUser);
-//			System.out.println(showUser.getBirth());
 		}
 	}
 	public void deleteUser(User user) {
-		User showUser = repository.getUserByIdOneUser(user.getId());
+		User showUser = repository.getUserById(user.getId());
 		System.out.println(showUser);
 		while(true) {
  		System.out.println("\nПодтвердите удаление пользователя (yes/no): ");
 		Scanner scanner = new Scanner(System.in);
-			String s = scanner.nextLine().trim();
-			if("yes".equals(s)) {
+			String response = scanner.nextLine().trim();
+			if("yes".equals(response)) {
 				repository.delete(user);
-				User deleteUser = repository.getUserByIdOneUser(user.getId());
+				User deleteUser = repository.getUserById(user.getId());
 				if (deleteUser == null) {
 					System.out.println("\nПользователь удален." );
 					break;
 				} else {
 					System.out.println("\nЧто-то пошло не так и пользователя не удалось удалить.");
 				}	
-			} else if("no".equals(s)) {
+			} else if("no".equals(response)) {
 				System.out.println("Отмена удаления пользователя.");
 				break;
 			} else {

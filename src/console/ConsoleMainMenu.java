@@ -17,10 +17,10 @@ public class ConsoleMainMenu extends Console {
 			while (true) {
 				System.out.println("Введите команду и нажмите Enter: ");
 				System.out.println("1 - просмотр всех пользователей");
-				System.out.println("2 - создание нового пользователя");
-				System.out.println("3 - обновление данных пользователя");
-				System.out.println("4 - удаление пользователя");
-				System.out.println("5 - просмотр конкретного пользователя");
+				System.out.println("2 - просмотр одного пользователя");
+				System.out.println("3 - создание нового пользователя");
+				System.out.println("4 - изменение данных пользователя");
+				System.out.println("5 - удаление пользователя");
 				System.out.print("Команда: ");
 
 				String n = scanner.nextLine().trim();
@@ -35,20 +35,21 @@ public class ConsoleMainMenu extends Console {
 					USER_OPERATIONS.showUsersData();
 					break;
 				case "2":
-					CONSOLE_CREATE_MENU.operate();
+					CONSOLE_SHOW_USER.operate();
 					break;
 				case "3":
-					CONSOLE_UPDATE_MENU.operate();
+					CONSOLE_CREATE_MENU.operate();
 					break;
 				case "4":
-					CONSOLE_DELETE_MENU.operate();
+					CONSOLE_UPDATE_MENU.operate();
 					break;
 				case "5":
-					CONSOLE_SHOW_USER.operate();
+					CONSOLE_DELETE_MENU.operate();
 					break;
 				}
 
-				System.out.print("\nВведите любую клавишу и нажмите Enter для завершения работы. Или нажмите Enter чтобы продолжить: ");
+				System.out.print(
+						"\nВведите любую клавишу и нажмите Enter для завершения работы. Или нажмите Enter чтобы продолжить: ");
 				if (!scanner.nextLine().matches("")) {
 					System.out.println("Работа завершена.");
 					break;

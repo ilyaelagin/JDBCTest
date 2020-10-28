@@ -13,23 +13,19 @@ import java.util.List;
 public class UserRepository {
 
     private static final String GET_ALL_USERS_SQL = "SELECT id, tabnum, name, surname, date_of_birth FROM users ORDER BY id;";
-   
     private static final String GET_ONE_USER_SQL = "SELECT id, tabnum, name, surname, date_of_birth FROM users WHERE id = ? ;";
-   
     private static final String GET_TABNUM_BY_TABNUM_SQL = "SELECT tabnum FROM users WHERE tabnum = ";
     private static final String GET_USER_BY_TABNUM_SQL = "SELECT id, tabnum, name, surname, date_of_birth FROM users WHERE tabnum = ";
     private static final String INSERT_USER_SQL = "INSERT INTO users(tabnum, name, surname, date_of_birth) VALUES(?, ?, ?, ?)";
-    
     private static final String GET_ID_BY_ID_SQL = "SELECT id FROM users WHERE id = ";
     private static final String GET_USER_BY_ID_SQL = "SELECT id, tabnum, name, surname, date_of_birth FROM users WHERE id = ";
     private static final String UPDATE_USER_SQL = "UPDATE users SET tabnum = ?, name = ?, surname = ?, date_of_birth = ? WHERE id = ?;";
-
     private static final String DELETE_USER_SQL = "DELETE FROM users WHERE id = ?;";
-
+    
     private static final String URL = "jdbc:postgresql://localhost:5432/test1";
     private static final String LOGIN = "postgres";
     private static final String PASSWORD = "123";
-
+    
     private Connection con;
 
     public UserRepository() {
@@ -54,17 +50,18 @@ public class UserRepository {
             return userList;
         }
     }
-    public List<User> getOne() {
-    	List<User> userOne = new ArrayList<>();
+    
+    public User[] getOne() {
+    	User[] one = new User[0];
     	try {
     		ResultSet rs = con.createStatement().executeQuery(GET_ONE_USER_SQL);
     		while (rs.next()) {
-    			userOne.add(new User(rs));
+    			one[0] = new User(rs);
     		}
-    		return userOne;
+    		return one;
     	} catch (Exception e) {
     		e.printStackTrace();
-    		return userOne;
+    		return one;
     	}
     }
 
@@ -88,7 +85,6 @@ public class UserRepository {
         }
     }
     
-    
     public Integer getIdById(int id) {
         try {
             ResultSet rs = con.createStatement().executeQuery(GET_ID_BY_ID_SQL + id + ";");
@@ -108,26 +104,6 @@ public class UserRepository {
             return null;
         }
     }
-    
-    public Integer getIdByIdOneUser(int id) {
-    	try {
-    		ResultSet rs = con.createStatement().executeQuery(GET_ID_BY_ID_SQL + id + ";");
-    		return rs.next() ? rs.getInt("id") : null;
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    		return null;
-    	}
-    }
-    
-    public User getUserByIdOneUser(int id) {
-    	try {
-    		ResultSet rs = con.createStatement().executeQuery(GET_USER_BY_ID_SQL + id + ";");
-    		return rs.next() ? new User(rs) : null;
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    		return null;
-    	}
-    }
 
     public void create(User user) {
         try {
@@ -142,6 +118,7 @@ public class UserRepository {
             System.out.println("Не удалось создать пользователя: " + user);
         }
     }
+    
     public void update(User user) {
     	try {
     		PreparedStatement pstmt = con.prepareStatement(UPDATE_USER_SQL);
@@ -156,6 +133,7 @@ public class UserRepository {
     		System.out.println("Не удалось обновить пользователя: " + user);
     	}
     }
+    
     public void show(User user) {
     	try {
     		PreparedStatement pstmt = con.prepareStatement(GET_ONE_USER_SQL);
@@ -166,6 +144,7 @@ public class UserRepository {
     		System.out.println("Не удалось получить пользователя: " + user);
     	}
     }
+    
     public void delete(User user) {
     	try {
     		PreparedStatement pstmt = con.prepareStatement(DELETE_USER_SQL);

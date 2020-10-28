@@ -1,13 +1,8 @@
 package console;
 
 import dto.User;
-import service.UserOperations;
-import java.util.Scanner;
 
 public class ConsoleCreateMenu extends Console {
-
-	private final UserOperations USER_OPERATIONS = new UserOperations();
-	Scanner scanner = new Scanner(System.in);
 
 	@Override
 	public void operate() {
@@ -27,11 +22,16 @@ public class ConsoleCreateMenu extends Console {
 					System.out.println("Табельный номер должен быть числовой!");
 					continue;
 				}
-				Integer tabnum = USER_OPERATIONS.getTabnumByTabnum(Integer.parseInt(value));
+				int tn = Integer.parseInt(value); 
+				if (tn < 0) {
+					System.out.println("tabnum должен быть больше нуля!");
+					continue;
+				}
+				Integer tabnum = USER_OPERATIONS.getTabnumByTabnum(tn);
 				if (tabnum != null) {
 					System.out.println("Значение tabnum: " + tabnum + " уже есть в базе! Введите уникальное значение.");
 					continue;
-				}
+				} 
 				return value;
 			}
 	}

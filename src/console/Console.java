@@ -3,13 +3,18 @@ package console;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
+
+import service.UserOperations;
 
 public abstract class Console {
 	protected static final String NAME_PATTERN = "[а-яА-Яa-zA-z]+(\\s|-)?([а-яА-Яa-zA-z]+)?";
     protected static final String DATE_PATTERN = "yyyy-MM-dd";
     protected static final String INT_PATTERN = "-?\\d+";
-    protected static final String NO_PATTERN = "no";
-    protected static final String YES_PATTERN = "yes";
+    
+    protected static final UserOperations USER_OPERATIONS = new UserOperations();
+    
+    protected static final Scanner scanner = new Scanner(System.in);
 
     protected static boolean isValidFormat(String value) {
         Date date = null;
@@ -25,6 +30,28 @@ public abstract class Console {
         }
         return date != null;
     }
+    
+    protected static String getIdConsoleInput() {
+		while (true) {
+			System.out.print("Введите id: ");
+			String value = scanner.nextLine().trim();
+			if (!value.matches(INT_PATTERN)) {
+				System.out.println("id должен быть числовой!");
+				continue;
+			}
+			int i = Integer.parseInt(value); 
+			if (i < 0) {
+				System.out.println("id должен быть больше нуля!");
+				continue;
+			}
+			Integer id = USER_OPERATIONS.getIdById(i);
+			if (id == null) {
+				System.out.println("Пользователь с id:" + value + " не найден!");
+				continue;
+			}
+			return value;
+		}
+	}
 
     /**
      * Всех наследников этого класса обязуем реализовывать метод operate()
