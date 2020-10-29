@@ -1,53 +1,17 @@
 package dto;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class User {
-	private int id;
-	private int tabnum;
-	private String name;
-	private String surname;
-	private String birth;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public int getTabnum() {
-		return tabnum;
-	}
-
-	public void setTabnum(int tabnum) {
-		this.tabnum = tabnum;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getSurname() {
-		return surname;
-	}
-
-	public void setSurname(String surname) {
-		this.surname = surname;
-	}
-
-	public String getBirth() {
-		return birth;
-	}
-
-	public void setBirth(String birth) {
-		this.birth = birth;
-	}
+	@Getter @Setter private int id;
+	@Getter @Setter private int tabnum;
+	@Getter @Setter private String name;
+	@Getter @Setter private String surname;
+	@Getter @Setter private String birth;
 	
 	public User() {
 		

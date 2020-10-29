@@ -5,6 +5,7 @@ import java.util.Scanner;
 import dto.User;
 import repository.UserRepository;
 
+
 /**
  * Это сервисный слой для работы с сущностью User
  * Сервисный - означает что тут присутствует бизнес логика
@@ -75,7 +76,7 @@ public class UserOperations {
 	}
 	public void deleteUser(User user) {
 		User showUser = repository.getUserById(user.getId());
-		System.out.println(showUser);
+		System.out.println("\n" + showUser);
 		while(true) {
  		System.out.println("\nПодтвердите удаление пользователя (yes/no): ");
 		Scanner scanner = new Scanner(System.in);
