@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
+import dto.User;
 import service.UserOperations;
 
 public abstract class Console {
@@ -39,13 +40,13 @@ public abstract class Console {
 				System.out.println("id должен быть числовой!");
 				continue;
 			}
-			int i = Integer.parseInt(value); 
-			if (i < 0) {
+			int id = Integer.parseInt(value); 
+			if (id < 0) {
 				System.out.println("id должен быть больше нуля!");
 				continue;
 			}
-			Integer id = USER_OPERATIONS.getIdById(i);
-			if (id == null) {
+			User userId = USER_OPERATIONS.getUserById(id);
+			if (userId == null) {
 				System.out.println("Пользователь с id:" + value + " не найден!");
 				continue;
 			}

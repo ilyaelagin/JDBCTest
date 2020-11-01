@@ -22,12 +22,12 @@ public class UserOperations {
 		repository.getAll().forEach(System.out::println);
 	}
 
-	public Integer getTabnumByTabnum(int tabnum) {
-		return repository.getTabnumByTabnum(tabnum);
+	public User getUserByTabnum(int tabnum) {
+		return repository.getUserByTabnum(tabnum);
 	}
 	
-	public Integer getIdById(int id) {
-		return repository.getIdById(id);
+	public User getUserById(int id) {
+		return repository.getUserById(id);
 	}
 
 	public void createUser(User user) {
@@ -39,8 +39,8 @@ public class UserOperations {
 			System.out.println("\nДобавлен новый пользователь: " + createdUser);
 		}
 	}
-	public void updateUser(User user) {
-		User userFromDb = repository.getUserById(user.getId());
+	public void updateUser(User user, User userFromDb) {
+		userFromDb = repository.getUserById(user.getId());
 		if(userFromDb == null) {
 			System.out.println("Ошибка обновления данных.");
 			return;

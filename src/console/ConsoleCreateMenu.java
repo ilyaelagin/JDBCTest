@@ -23,13 +23,13 @@ public class ConsoleCreateMenu extends Console {
 				continue;
 			}
 			int tn = Integer.parseInt(value);
-			if (tn < 0) {
+			if (tn <= 0) {
 				System.out.println("tabnum должен быть больше нуля!");
 				continue;
 			}
-			Integer tabnum = USER_OPERATIONS.getTabnumByTabnum(tn);
-			if (tabnum != null) {
-				System.out.println("Значение tabnum: " + tabnum + " уже есть в базе! Введите уникальное значение.");
+			User userTabnum = USER_OPERATIONS.getUserByTabnum(tn);
+			if (userTabnum != null) {
+				System.out.println("Значение tabnum:" + userTabnum.getTabnum() + " уже есть в базе! Введите уникальное значение.");
 				continue;
 			}
 			return value;
