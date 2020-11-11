@@ -48,8 +48,7 @@ public class ConsoleMainMenu extends Console {
 					break;
 				}
 
-				System.out.print(
-						"\nВведите любую клавишу и нажмите Enter для завершения работы. Или нажмите Enter чтобы продолжить: ");
+				System.out.print("\nВведите любую клавишу и нажмите Enter для завершения работы. Или нажмите Enter чтобы продолжить: ");
 				if (!scanner.nextLine().matches("")) {
 					System.out.println("Работа завершена.");
 					break;

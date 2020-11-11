@@ -41,22 +41,7 @@ public class UserOperations {
 	}
 	public void updateUser(User user, User userFromDb) {
 		userFromDb = repository.getUserById(user.getId());
-		if(userFromDb == null) {
-			System.out.println("Ошибка обновления данных.");
-			return;
-		}
-		if(user.getTabnum() != 0) {
-			userFromDb.setTabnum(user.getTabnum());
-		}
-		if(user.getName() != null) {
-			userFromDb.setName(user.getName());
-		}
-		if(user.getSurname() != null) {
-			userFromDb.setSurname(user.getSurname());
-		}
-		if(user.getBirth() != null) {
-			userFromDb.setBirth(user.getBirth());
-		}
+		prepareUserForUpdate(user, userFromDb);
 		repository.update(userFromDb);
 		User updateUser = repository.getUserById(user.getId());
 		if (updateUser == null) {
@@ -65,6 +50,26 @@ public class UserOperations {
 			System.out.println("\nОбновлены данные пользователя: " + updateUser);
 		}
 	}
+	
+	 public User prepareUserForUpdate(User user, User userFromDb) {
+		 if(userFromDb == null) {
+				throw new IllegalArgumentException("Ошибка обновления данных. Не удалось получить данные о пользователе " + userFromDb);
+			}
+			if(user.getTabnum() != 0) {
+				userFromDb.setTabnum(user.getTabnum());
+			}
+			if(user.getName() != null) {
+				userFromDb.setName(user.getName());
+			}
+			if(user.getSurname() != null) {
+				userFromDb.setSurname(user.getSurname());
+			}
+			if(user.getBirth() != null) {
+				userFromDb.setBirth(user.getBirth());
+			}
+			return userFromDb;
+	 }
+	
 	public void showUser(User user) {
 		repository.show(user);
 		User showUser = repository.getUserById(user.getId());

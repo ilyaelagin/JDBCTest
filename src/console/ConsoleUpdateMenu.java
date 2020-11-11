@@ -15,6 +15,7 @@ public class ConsoleUpdateMenu extends Console {
 		enterSurname(user);
 		enterBirth(user);
 		USER_OPERATIONS.updateUser(user, userFromDb);
+		
 	}
 
 	private String getTabnumConsoleInput() {

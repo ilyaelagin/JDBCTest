@@ -1,37 +1,39 @@
 package test;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import dto.User;
-import repository.UserRepository;
+import service.UserOperations;
 
 public class UserOperationsTest {
-	private static UserRepository repository;
+	private static UserOperations operations;
 
 	@BeforeClass
 	public static void createNewUserRepository() {
-		repository = new UserRepository();
+		operations = new UserOperations();
 	}
 
 	@Test
 	public void updateUserrr() {
 		User userFromDb = new User();
-		userFromDb.setTabnum(10);
+		userFromDb.setId(1);
+		userFromDb.setTabnum(100);
 		userFromDb.setName("Tom");
-		userFromDb.setSurname("Ford");
-		userFromDb.setBirth("1970-01-01");
+		userFromDb.setSurname("Hancks");
+		userFromDb.setBirth("1962-06-26");
 		User user = new User();
-		user.setTabnum(0);
-		user.setName("");
-		user.setSurname("");
-		user.setBirth("");
-
-		
-		
-		repository.update(userFromDb);
-		User updateUser = repository.getUserById(user.getId());
+		user.setTabnum(10);
+		user.setName("Thomas");
+		User userForUpdate = operations.prepareUserForUpdate(user, userFromDb);
+		assertNotNull(userForUpdate);
+		assertEquals(userForUpdate.getTabnum(), 10);
+		assertEquals(userForUpdate.getName(), "Thomas");
+		assertEquals(userForUpdate.getSurname(), "Hancks");
+		assertEquals(userForUpdate.getBirth(), "1962-06-26");
 	}
 
 }
