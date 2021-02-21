@@ -1,12 +1,12 @@
 package console;
 
+import dto.User;
+import service.UserOperations;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
-
-import dto.User;
-import service.UserOperations;
 
 public abstract class Console {
 	protected static final String NAME_PATTERN = "[а-яА-Яa-zA-z]+(\\s|-)?([а-яА-Яa-zA-z]+)?";
